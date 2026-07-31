@@ -25,19 +25,25 @@ Page({
       return;
     }
     const me = openid;
+    let unreadSum = 0;
     const chats = rows.map(c => {
       const iAmBuyer = c.buyerId === me;
+      const unread = (iAmBuyer ? c.buyerUnread : c.sellerUnread) || 0;
+      unreadSum += unread;
       return {
         id: c._id, chatId: c._id,
         avatar: iAmBuyer ? '👦' : '🧑',
         name: (iAmBuyer ? c.sellerName : c.buyerName) || '同学',
         lastMsg: c.lastMsg || '（暂无消息）',
         time: fromNow(c.lastAt),
-        unread: 0,
+        unread,
         itemId: c.itemId, itemTitle: c.itemTitle, price: c.price
       };
     });
     this.setData({ chats, live: true });
+    // 同步 tabBar 徽标（v0.4.0）
+    if (unreadSum > 0) wx.setTabBarBadge({ index: 2, text: unreadSum > 99 ? '99+' : String(unreadSum), fail: () => {} });
+    else wx.removeTabBarBadge({ index: 2, fail: () => {} });
   },
 
   openChat(e) {

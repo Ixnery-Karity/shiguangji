@@ -55,12 +55,18 @@ Page({
     const me = app.globalData.openid;
     this.setData({ live: true, role: me === this._sellerId ? 'seller' : 'buyer' });
 
+    // 进入会话：清零我的未读数（v0.4.0）
+    db.clearUnread(this._chatId, this.data.role);
+
     // 历史消息 + 实时监听（watch 首次快照即含全量，直接以快照为准渲染）
     this._msgWatcher = db.watchMessages(this._chatId, (docs) => {
       const messages = docs.map(m => ({
         id: m._id, content: m.content, me: m.from === me, type: m.type || 'text'
       }));
       this.setData({ messages, scrollTo: 'bottom' });
+      // 在会话内收到新消息即视为已读（v0.4.0）
+      const hasIncoming = docs.some(m => m.from !== me);
+      if (hasIncoming) db.clearUnread(this._chatId, this.data.role);
     });
     if (!this._msgWatcher) {
       const docs = await db.listMessages(this._chatId);
@@ -210,7 +216,7 @@ Page({
       tradeStatus: '已完成', tradeStatusText: '交易已完成',
       dealBtnText: '已完成'
     });
-    this.pushMsg('🎉 交易已完成，感谢使用校园集市！记得互相评价哦', false, 'sys');
+    this.pushMsg('🎉 交易已完成，感谢使用拾光集！记得互相评价哦', false, 'sys');
     toast('交易完成', 'success');
   },
 

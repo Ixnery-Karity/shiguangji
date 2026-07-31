@@ -19,6 +19,7 @@
       <text class="tag">校内当面</text>
       <text class="tag">仅撮合不担保</text>
     </view>
+    <view class="views">👁 浏览 {{item.views || 0}} 次</view>
   </view>
 
   <!-- 卖家 -->
@@ -45,6 +46,32 @@
   </view>
 
   <view class="safe-tip">🛡️ 请在校内公共区域当面验货交易，平台不经手货款，谨防诈骗。</view>
+
+  <!-- 卖家其他在售（v0.4.0） -->
+  <view wx:if="{{sellerItems.length}}" class="rec-block">
+    <view class="dt">Ta 的其他在售</view>
+    <scroll-view class="rec-scroll" scroll-x>
+      <view wx:for="{{sellerItems}}" wx:key="_id" class="rec-card"
+        data-id="{{item._id}}" bindtap="openItem">
+        <view class="rec-img">{{item.cover || '📦'}}</view>
+        <view class="rec-title ellipsis">{{item.title}}</view>
+        <view class="rec-price">¥{{item.price}}</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 相关推荐（v0.4.0） -->
+  <view wx:if="{{related.length}}" class="rec-block">
+    <view class="dt">相关推荐</view>
+    <scroll-view class="rec-scroll" scroll-x>
+      <view wx:for="{{related}}" wx:key="_id" class="rec-card"
+        data-id="{{item._id}}" bindtap="openItem">
+        <view class="rec-img">{{item.cover || '📦'}}</view>
+        <view class="rec-title ellipsis">{{item.title}}</view>
+        <view class="rec-price">¥{{item.price}}</view>
+      </view>
+    </scroll-view>
+  </view>
 
   <!-- 底部操作栏 -->
   <view class="action-bar">

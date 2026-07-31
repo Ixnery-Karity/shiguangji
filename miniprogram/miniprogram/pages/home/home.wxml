@@ -5,9 +5,32 @@
     <view class="search-box">
       <text class="ico">🔍</text>
       <input class="input" placeholder="搜索教材 / 数码 / 生活用品" value="{{keyword}}"
-        bindconfirm="onSearch" bindinput="onInput" confirm-type="search" />
+        bindconfirm="onSearch" bindinput="onInput" bindfocus="onSearchFocus" confirm-type="search" />
+      <text wx:if="{{keyword}}" class="clear" catchtap="onClearKeyword">✕</text>
     </view>
     <view class="loc">📍{{campus}}</view>
+  </view>
+
+  <!-- 搜索面板：历史 + 热门（v0.4.0） -->
+  <view wx:if="{{showSearchPanel}}" class="search-panel">
+    <view wx:if="{{history.length}}" class="sp-sec">
+      <view class="sp-head">
+        <text class="sp-title">搜索历史</text>
+        <text class="sp-clear" bindtap="onClearHistory">🗑 清空</text>
+      </view>
+      <view class="sp-words">
+        <text wx:for="{{history}}" wx:key="*this" class="sp-word"
+          data-w="{{item}}" bindtap="onTapWord">{{item}}</text>
+      </view>
+    </view>
+    <view class="sp-sec">
+      <view class="sp-head"><text class="sp-title">🔥 热门搜索</text></view>
+      <view class="sp-words">
+        <text wx:for="{{hotWords}}" wx:key="*this" class="sp-word hot"
+          data-w="{{item}}" bindtap="onTapWord">{{item}}</text>
+      </view>
+    </view>
+    <view class="sp-close" bindtap="onClosePanel">收起 ▲</view>
   </view>
 
   <!-- 分类 -->
@@ -16,6 +39,20 @@
       class="cat {{item === category ? 'on' : ''}}"
       data-cat="{{item}}" bindtap="onCategory">{{item}}</view>
   </scroll-view>
+
+  <!-- 排序 + 成色筛选（v0.4.0） -->
+  <view class="filterbar">
+    <view class="sorts">
+      <text wx:for="{{sorts}}" wx:key="key"
+        class="sort {{sort === item.key ? 'on' : ''}}"
+        data-s="{{item.key}}" bindtap="onSort">{{item.label}}</text>
+    </view>
+    <scroll-view class="conds" scroll-x>
+      <text wx:for="{{conditions}}" wx:key="*this"
+        class="cond {{item === condition ? 'on' : ''}}"
+        data-c="{{item}}" bindtap="onCondition">{{item === '全部' ? '成色' : item}}</text>
+    </scroll-view>
+  </view>
 
   <!-- 提示：云环境未就绪时展示 -->
   <view wx:if="{{!cloudReady}}" class="tip">

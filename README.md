@@ -32,15 +32,16 @@ shiguangji/（拾光集）
 ├── CHANGELOG.md                 # 变更日志
 ├── docs/                        # 产品文档
 │   ├── 需求验证问卷.docx          # 阶段0：需求调研问卷（22题）
-│   └── MVP产品需求文档PRD.docx     # MVP PRD（功能清单+流程+数据模型+里程碑）
+│   ├── MVP产品需求文档PRD.docx     # MVP PRD（功能清单+流程+数据模型+里程碑）
+│   └── 竞品调研报告.md            # 【v0.4.0】竞品拆解+功能对比矩阵+版本建议
 ├── prototypes/                  # 原型与流程图（浏览器打开）
 │   ├── prototype.html           # 6个核心页面低保真原型
 │   └── flowchart.html           # 4张核心业务流程图
-├── miniprogram/                 # 【v0.3.0】微信小程序 MVP（原生+云开发）
+├── miniprogram/                 # 【v0.4.0】微信小程序 MVP（原生+云开发）
 │   ├── README.md                # 小程序运行说明（重要）
 │   ├── project.config.json
 │   ├── miniprogram/             # 前端：8个页面 + 组件 + utils
-│   └── cloudfunctions/          # 云函数：login / seed / authEmail / tradeConfirm
+│   └── cloudfunctions/          # 云函数：login / seed / authEmail / tradeConfirm / itemView
 └── scripts/                     # 文档生成脚本
     ├── gen_questionnaire.py     # 生成问卷 docx
     └── gen_prd.py               # 生成 PRD docx
@@ -52,7 +53,8 @@ shiguangji/（拾光集）
 2. **MVP PRD**（`docs/MVP产品需求文档PRD.docx`）——含产品定位与边界、用户角色权限、**功能清单（26 项，标注 P0/P1/P2 优先级）**、核心业务流程、页面结构与信息架构、数据模型、非功能需求、技术选型、里程碑排期、风险对策。
 3. **页面原型**（`prototypes/prototype.html`）——首页 / 商品详情 / 发布 / 学生认证 / 聊天 / 个人中心 6 个页面，手机尺寸，浏览器直接查看。
 4. **流程图**（`prototypes/flowchart.html`）——学生认证、发布商品、撮合交易、全局页面跳转 4 张 SVG 流程图。
-5. **微信小程序 MVP**（`miniprogram/`）——微信原生 + 云开发，8 个页面跑通 P0 全流程（认证拦截、多图上传、撮合交易闭环）。v0.3.0 起核心链路为**云端真实逻辑**：消息 `.watch()` 实时同步、邮箱验证码服务端生成/校验（可配 SMTP 真实发信）、交易双向确认服务端闭环并自动标记已售。**零配置仍可用 mock 数据预览**。详见 `miniprogram/README.md`。
+5. **微信小程序 MVP**（`miniprogram/`）——微信原生 + 云开发，8 个页面跑通 P0 全流程（认证拦截、多图上传、撮合交易闭环）。v0.3.0 起核心链路为**云端真实逻辑**：消息 `.watch()` 实时同步、邮箱验证码服务端生成/校验（可配 SMTP 真实发信）、交易双向确认服务端闭环并自动标记已售。v0.4.0 对标竞品补齐：**收藏持久化、搜索历史/排序/成色筛选、未读消息角标、浏览量与相关推荐**。**零配置仍可用 mock 数据预览**。详见 `miniprogram/README.md`。
+6. **竞品调研报告**（`docs/竞品调研报告.md`）——闲鱼/转转/多抓鱼/校园群等 6 类竞品拆解、16 项功能对比矩阵、版本路线建议（v0.4.0 依据）。
 
 ## 如何查看
 
@@ -96,4 +98,4 @@ shiguangji/（拾光集）
 
 ---
 
-当前版本：**v0.3.1**（详见 [CHANGELOG.md](CHANGELOG.md)）
+当前版本：**v0.4.0**（详见 [CHANGELOG.md](CHANGELOG.md)）

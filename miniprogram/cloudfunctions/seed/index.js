@@ -21,7 +21,7 @@ async function ensureCollection(name) {
 }
 
 exports.main = async () => {
-  const collections = ['users', 'items', 'chats', 'messages', 'trades', 'authRecords', 'authCodes', 'reports'];
+  const collections = ['users', 'items', 'chats', 'messages', 'trades', 'authRecords', 'authCodes', 'reports', 'favorites'];
   for (const c of collections) await ensureCollection(c);
 
   // 清空旧演示商品（仅清 seed 标记的）后重新写入
@@ -32,7 +32,7 @@ exports.main = async () => {
   let count = 0;
   for (const it of ITEMS) {
     await db.collection('items').add({
-      data: Object.assign({ _seed: true, createdAt: db.serverDate() }, it)
+      data: Object.assign({ _seed: true, views: 0, createdAt: db.serverDate() }, it)
     });
     count++;
   }

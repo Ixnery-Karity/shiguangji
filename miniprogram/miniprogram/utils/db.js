@@ -24,16 +24,38 @@ async function callFn(name, data) {
   }
 }
 
-// 商品列表（支持分类、关键词）
-async function listItems({ category = '全部', keyword = '' } = {}) {
+// 排序应用：new 最新 / priceAsc 价格升 / priceDesc 价格降
+function applySort(data, sort) {
+  if (sort === 'priceAsc') return data.sort((a, b) => (a.price || 0) - (b.price || 0));
+  if (sort === 'priceDesc') return data.sort((a, b) => (b.price || 0) - (a.price || 0));
+  return data.sort((a, b) => {
+    const ta = new Date(a.createdAt || 0).getTime(), tb = new Date(b.createdAt || 0).getTime();
+    return tb - ta;
+  });
+}
+
+// 「七成新及以下」= 除全新/九成新/八成新以外的所有成色
+const HIGH_CONDITIONS = ['全新', '九成新', '八成新'];
+function matchCondition(item, condition) {
+  if (!condition || condition === '全部') return true;
+  if (condition === '七成新及以下') return HIGH_CONDITIONS.indexOf(item.condition) < 0;
+  return item.condition === condition;
+}
+
+// 商品列表（支持分类、关键词、成色筛选、排序 v0.4.0）
+async function listItems({ category = '全部', keyword = '', condition = '全部', sort = 'new' } = {}) {
   if (hasCloud()) {
     try {
-      const db = wx.cloud.database();
-      const _ = db.command;
+      const _ = wx.cloud.database().command;
       const where = { status: '在售' };
       if (category && category !== '全部') where.category = category;
-      let q = coll('items').where(where);
-      const res = await q.orderBy('createdAt', 'desc').limit(50).get();
+      if (condition && condition !== '全部') {
+        where.condition = condition === '七成新及以下' ? _.nin(HIGH_CONDITIONS) : condition;
+      }
+      const orderField = sort === 'new' ? 'createdAt' : 'price';
+      const orderDir = sort === 'priceAsc' ? 'asc' : 'desc';
+      const res = await coll('items').where(where)
+        .orderBy(orderField, orderDir).limit(50).get();
       let data = res.data || [];
       if (keyword) data = data.filter(i => (i.title || '').indexOf(keyword) >= 0);
       if (data.length) return data;
@@ -44,8 +66,9 @@ async function listItems({ category = '全部', keyword = '' } = {}) {
   // 回退 mock
   let data = mock.ITEMS.slice();
   if (category && category !== '全部') data = data.filter(i => i.category === category);
+  data = data.filter(i => matchCondition(i, condition));
   if (keyword) data = data.filter(i => i.title.indexOf(keyword) >= 0);
-  return data;
+  return applySort(data, sort);
 }
 
 // 商品详情
@@ -69,6 +92,92 @@ async function addItem(item) {
     status: '在售', createdAt: db.serverDate(), images: [], condition: '九成新'
   }, item);
   return coll('items').add({ data });
+}
+
+// 卖家其他在售（v0.4.0）：云端按 _openid，mock 按 sellerName
+async function listSellerItems({ sellerId = '', sellerName = '', excludeId = '' } = {}) {
+  if (hasCloud() && sellerId) {
+    try {
+      const res = await coll('items').where({ _openid: sellerId, status: '在售' })
+        .orderBy('createdAt', 'desc').limit(5).get();
+      return (res.data || []).filter(i => i._id !== excludeId).slice(0, 4);
+    } catch (e) { console.warn('[db] listSellerItems 回退：', e.errMsg || e); }
+  }
+  return mock.ITEMS.filter(i => i.sellerName === sellerName && i._id !== excludeId).slice(0, 4);
+}
+
+// 同分类相关推荐（v0.4.0）
+async function listRelated({ category = '', excludeId = '' } = {}) {
+  if (hasCloud() && category) {
+    try {
+      const res = await coll('items').where({ category, status: '在售' })
+        .orderBy('createdAt', 'desc').limit(5).get();
+      return (res.data || []).filter(i => i._id !== excludeId).slice(0, 4);
+    } catch (e) { console.warn('[db] listRelated 回退：', e.errMsg || e); }
+  }
+  return mock.ITEMS.filter(i => i.category === category && i._id !== excludeId).slice(0, 4);
+}
+
+// 浏览量 +1（v0.4.0）：走 itemView 云函数（服务端 inc，规避客户端跨用户写权限），失败静默
+function incView(itemId) {
+  callFn('itemView', { itemId });
+}
+
+// ============ 收藏（v0.4.0） ============
+// 云端 favorites 集合持久化；云不可用时回退本地缓存，保证零配置可用。
+const FAV_KEY = 'favorites';
+
+function localFavs() { return wx.getStorageSync(FAV_KEY) || []; }
+function saveLocalFavs(list) { wx.setStorageSync(FAV_KEY, list); }
+
+// 是否已收藏
+async function isFaved(itemId) {
+  const openid = getApp().globalData.openid;
+  if (hasCloud() && openid) {
+    try {
+      const res = await coll('favorites').where({ itemId, _openid: openid }).limit(1).get();
+      return res.data.length > 0;
+    } catch (e) { console.warn('[db] isFaved 回退本地：', e.errMsg || e); }
+  }
+  return localFavs().some(f => f.itemId === itemId);
+}
+
+// 切换收藏，返回最新收藏态；快照字段冗余存储便于列表直接展示
+async function toggleFav(item) {
+  const snap = {
+    itemId: item._id, title: item.title, price: item.price,
+    cover: item.cover || '📦', condition: item.condition || '', createdAt: Date.now()
+  };
+  const openid = getApp().globalData.openid;
+  if (hasCloud() && openid) {
+    try {
+      const exist = await coll('favorites').where({ itemId: snap.itemId, _openid: openid }).limit(1).get();
+      if (exist.data.length) {
+        await coll('favorites').doc(exist.data[0]._id).remove();
+        return false;
+      }
+      await coll('favorites').add({ data: snap });
+      return true;
+    } catch (e) { console.warn('[db] toggleFav 回退本地：', e.errMsg || e); }
+  }
+  const list = localFavs();
+  const idx = list.findIndex(f => f.itemId === snap.itemId);
+  if (idx >= 0) { list.splice(idx, 1); saveLocalFavs(list); return false; }
+  list.unshift(snap); saveLocalFavs(list);
+  return true;
+}
+
+// 我的收藏列表
+async function myFavs() {
+  const openid = getApp().globalData.openid;
+  if (hasCloud() && openid) {
+    try {
+      const res = await coll('favorites').where({ _openid: openid })
+        .orderBy('createdAt', 'desc').limit(50).get();
+      return res.data || [];
+    } catch (e) { console.warn('[db] myFavs 回退本地：', e.errMsg || e); }
+  }
+  return localFavs();
 }
 
 // 我的发布
@@ -140,19 +249,46 @@ async function listMessages(chatId) {
   }
 }
 
-// 发送消息，并同步会话摘要
-async function sendMessage({ chatId, content, type = 'text' }) {
+// 发送消息，并同步会话摘要 + 对方未读数 +1（v0.4.0）
+async function sendMessage({ chatId, content, type = 'text', chat = null }) {
   if (!hasCloud() || !chatId) throw new Error('云环境未就绪');
   const app = getApp();
+  const me = app.globalData.openid;
   const res = await coll('messages').add({
-    data: { chatId, content, type, from: app.globalData.openid, createdAt: Date.now() }
+    data: { chatId, content, type, from: me, createdAt: Date.now() }
   });
   try {
-    await coll('chats').doc(chatId).update({
-      data: { lastMsg: type === 'text' ? content : `[${type}]`, lastAt: Date.now() }
-    });
+    const db = wx.cloud.database();
+    const _ = db.command;
+    const update = { lastMsg: type === 'text' ? content : `[${type}]`, lastAt: Date.now() };
+    // 我是买家则给卖家未读 +1，反之亦然；未传入 chat 文档时查一次
+    if (!chat) {
+      const r = await coll('chats').doc(chatId).get();
+      chat = r.data;
+    }
+    if (chat) update[me === chat.buyerId ? 'sellerUnread' : 'buyerUnread'] = _.inc(1);
+    await coll('chats').doc(chatId).update({ data: update });
   } catch (e) { /* 摘要更新失败不影响消息本身 */ }
   return res;
+}
+
+// 清零我在某会话中的未读数（进入会话时调用，v0.4.0）
+async function clearUnread(chatId, role) {
+  if (!hasCloud() || !chatId) return;
+  try {
+    const field = role === 'seller' ? 'sellerUnread' : 'buyerUnread';
+    await coll('chats').doc(chatId).update({ data: { [field]: 0 } });
+  } catch (e) { /* 静默 */ }
+}
+
+// 我的未读消息总数（用于 tabBar 徽标，v0.4.0）
+async function unreadTotal(openid) {
+  const rows = await myChats(openid);
+  if (!rows) return 0;
+  return rows.reduce((sum, c) => {
+    const n = c.buyerId === openid ? (c.buyerUnread || 0) : (c.sellerUnread || 0);
+    return sum + n;
+  }, 0);
 }
 
 // 实时监听会话消息：返回 watcher（需在页面 onUnload 调用 watcher.close()）
@@ -252,7 +388,10 @@ async function verifyEmailCode(email, code) {
 
 module.exports = {
   hasCloud, listItems, getItem, addItem, myItems,
+  listSellerItems, listRelated, incView,
+  isFaved, toggleFav, myFavs,
   getOrCreateChat, myChats, listMessages, sendMessage, watchMessages, watchTrade,
+  clearUnread, unreadTotal,
   createTrade, confirmTrade, getTrade, myTrades,
   sendEmailCode, verifyEmailCode
 };

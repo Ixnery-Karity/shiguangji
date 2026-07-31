@@ -29,6 +29,23 @@
 
 .safe-tip { margin: 16rpx 24rpx; font-size: 22rpx; color: #a1740b; background: #fff8e1; padding: 16rpx 20rpx; border-radius: 12rpx; line-height: 1.5; }
 
+.views { margin-top: 12rpx; font-size: 22rpx; color: #999; }
+
+/* 卖家在售 / 相关推荐（v0.4.0） */
+.rec-block { background: #fff; padding: 24rpx 0 24rpx 24rpx; margin-top: 16rpx; }
+.rec-block .dt { font-size: 26rpx; font-weight: bold; margin-bottom: 16rpx; }
+.rec-scroll { white-space: nowrap; }
+.rec-card {
+  display: inline-block; width: 200rpx; margin-right: 16rpx;
+  background: #fafafa; border-radius: 12rpx; overflow: hidden; vertical-align: top;
+}
+.rec-img {
+  height: 160rpx; display: flex; align-items: center; justify-content: center;
+  font-size: 80rpx; background: linear-gradient(135deg, #dfe9e3, #c8e6c9);
+}
+.rec-title { font-size: 22rpx; color: #333; padding: 8rpx 12rpx 0; }
+.rec-price { font-size: 24rpx; color: #e53935; font-weight: bold; padding: 4rpx 12rpx 12rpx; }
+
 .action-bar {
   position: fixed; bottom: 0; left: 0; right: 0; height: 110rpx;
   background: #fff; border-top: 1rpx solid #ececec;

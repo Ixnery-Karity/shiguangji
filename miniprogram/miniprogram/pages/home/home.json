@@ -2,7 +2,7 @@
   "usingComponents": {
     "item-card": "/components/item-card/item-card"
   },
-  "navigationBarTitleText": "校园集市",
+  "navigationBarTitleText": "拾光集",
   "enablePullDownRefresh": true,
   "onReachBottomDistance": 80
 }

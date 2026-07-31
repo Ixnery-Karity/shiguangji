@@ -4,9 +4,10 @@ const db = require('../../utils/db');
 
 Page({
   data: {
-    tab: 'ongoing',   // ongoing / done / items
+    tab: 'ongoing',   // ongoing / done / items / favs
     list: [],
-    myItems: []
+    myItems: [],
+    favs: []
   },
 
   onLoad(q) {
@@ -24,6 +25,9 @@ Page({
     if (this.data.tab === 'items') {
       const items = await db.myItems(openid);
       this.setData({ myItems: items });
+    } else if (this.data.tab === 'favs') {
+      const favs = await db.myFavs();
+      this.setData({ favs });
     } else {
       let trades = await db.myTrades(openid);
       const wantDone = this.data.tab === 'done';

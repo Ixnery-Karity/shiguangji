@@ -11,7 +11,38 @@
 }
 .search-box .ico { font-size: 26rpx; margin-right: 10rpx; }
 .search-box .input { flex: 1; font-size: 26rpx; }
+.search-box .clear { font-size: 24rpx; color: #999; padding: 0 8rpx; }
 .loc { font-size: 24rpx; color: #2E7D32; white-space: nowrap; }
+
+/* 搜索面板：历史 + 热门（v0.4.0） */
+.search-panel { background: #fff; padding: 8rpx 24rpx 0; border-bottom: 1rpx solid #f0f0f0; }
+.sp-sec { padding: 12rpx 0; }
+.sp-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12rpx; }
+.sp-title { font-size: 24rpx; color: #333; font-weight: bold; }
+.sp-clear { font-size: 22rpx; color: #999; }
+.sp-words { display: flex; flex-wrap: wrap; gap: 12rpx; }
+.sp-word {
+  font-size: 24rpx; color: #555; background: #f0f0f0;
+  padding: 8rpx 22rpx; border-radius: 24rpx;
+}
+.sp-word.hot { background: #fff3e0; color: #e65100; }
+.sp-close { text-align: center; font-size: 22rpx; color: #bbb; padding: 12rpx 0 16rpx; }
+
+/* 排序 + 成色筛选（v0.4.0） */
+.filterbar {
+  display: flex; align-items: center; gap: 16rpx;
+  background: #fff; padding: 4rpx 24rpx 14rpx;
+}
+.sorts { display: flex; gap: 8rpx; flex-shrink: 0; }
+.sort { font-size: 24rpx; color: #666; padding: 6rpx 18rpx; border-radius: 22rpx; }
+.sort.on { color: #2E7D32; font-weight: bold; background: #e8f5e9; }
+.conds { white-space: nowrap; flex: 1; width: 0; }
+.cond {
+  display: inline-block; font-size: 22rpx; color: #888;
+  border: 1rpx solid #e0e0e0; border-radius: 20rpx;
+  padding: 4rpx 16rpx; margin-right: 10rpx;
+}
+.cond.on { color: #2E7D32; border-color: #2E7D32; background: #e8f5e9; }
 
 /* 分类 */
 .cats { white-space: nowrap; background: #fff; padding: 8rpx 16rpx 16rpx; }

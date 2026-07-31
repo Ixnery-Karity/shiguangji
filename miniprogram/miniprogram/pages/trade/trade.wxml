@@ -4,10 +4,27 @@
     <view class="tab {{tab==='ongoing' ? 'on' : ''}}" data-t="ongoing" bindtap="switchTab">进行中</view>
     <view class="tab {{tab==='done' ? 'on' : ''}}" data-t="done" bindtap="switchTab">已完成</view>
     <view class="tab {{tab==='items' ? 'on' : ''}}" data-t="items" bindtap="switchTab">我发布的</view>
+    <view class="tab {{tab==='favs' ? 'on' : ''}}" data-t="favs" bindtap="switchTab">我的收藏</view>
   </view>
 
+  <!-- 我的收藏（v0.4.0） -->
+  <block wx:if="{{tab === 'favs'}}">
+    <view wx:if="{{favs.length}}" class="list">
+      <view wx:for="{{favs}}" wx:key="itemId" class="trade-item" data-id="{{item.itemId}}" bindtap="openItem">
+        <view class="th">{{item.cover || '📦'}}</view>
+        <view class="t-main">
+          <view class="t-title ellipsis">{{item.title}}</view>
+          <view class="t-meta">{{item.condition || '—'}}</view>
+          <view class="t-price">¥{{item.price}}</view>
+        </view>
+        <view class="t-status ing">⭐</view>
+      </view>
+    </view>
+    <view wx:else class="empty"><text class="emoji">⭐</text><text>还没有收藏，去首页逛逛吧</text></view>
+  </block>
+
   <!-- 交易列表 -->
-  <block wx:if="{{tab !== 'items'}}">
+  <block wx:elif="{{tab !== 'items'}}">
     <view wx:if="{{list.length}}" class="list">
       <view wx:for="{{list}}" wx:key="_id" class="trade-item">
         <view class="th">📦</view>

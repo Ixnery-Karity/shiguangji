@@ -33,9 +33,9 @@ async function sendMail(email, code) {
     auth: { user: SMTP_USER, pass: SMTP_PASS }
   });
   await transporter.sendMail({
-    from: `"校园集市" <${SMTP_USER}>`,
+    from: `"拾光集" <${SMTP_USER}>`,
     to: email,
-    subject: '校园集市 · 邮箱验证码',
+    subject: '拾光集 · 邮箱验证码',
     text: `你的验证码是 ${code}，5 分钟内有效。若非本人操作请忽略本邮件。`
   });
   return true;

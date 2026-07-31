@@ -4,6 +4,10 @@
 
 const CATEGORIES = ['全部', '教材', '数码', '生活', '美妆', '卡券', '其他'];
 
+// v0.4.0：成色筛选项与热门搜索词（热词后续可由云端搜索日志聚合替代）
+const CONDITIONS = ['全部', '全新', '九成新', '八成新', '七成新及以下'];
+const HOT_WORDS = ['高数', '耳机', '自行车', '四六级', '考研', '口红', '笔记本'];
+
 const ITEMS = [
   {
     _id: 'm1', title: '高等数学 同济第七版 上册 九成新无笔记',
@@ -11,7 +15,7 @@ const ITEMS = [
     price: 15, originPrice: 42, category: '教材', condition: '九成新',
     cover: '📘', images: ['📘', '📗', '📙'], location: '3号宿舍楼',
     sellerName: '王同学', sellerVerified: true, sellerCredit: '成交28笔·好评98%',
-    status: '在售', createdAt: Date.now() - 3600 * 1000 * 2
+    status: '在售', views: 156, createdAt: Date.now() - 3600 * 1000 * 2
   },
   {
     _id: 'm2', title: '索尼降噪耳机 WH-1000XM4 自用无拆修',
@@ -19,7 +23,7 @@ const ITEMS = [
     price: 680, originPrice: 1899, category: '数码', condition: '九成新',
     cover: '🎧', images: ['🎧'], location: '图书馆',
     sellerName: '李同学', sellerVerified: true, sellerCredit: '成交12笔·好评100%',
-    status: '在售', createdAt: Date.now() - 3600 * 1000 * 5
+    status: '在售', views: 89, createdAt: Date.now() - 3600 * 1000 * 5
   },
   {
     _id: 'm3', title: '通勤自行车 捷安特 可议价',
@@ -27,7 +31,7 @@ const ITEMS = [
     price: 220, originPrice: 600, category: '生活', condition: '七成新',
     cover: '🚲', images: ['🚲'], location: '东门',
     sellerName: '张同学', sellerVerified: true, sellerCredit: '成交5笔·好评95%',
-    status: '在售', createdAt: Date.now() - 3600 * 1000 * 8
+    status: '在售', views: 47, createdAt: Date.now() - 3600 * 1000 * 8
   },
   {
     _id: 'm4', title: '全新口红 色号#12 未拆封',
@@ -35,7 +39,7 @@ const ITEMS = [
     price: 60, originPrice: 320, category: '美妆', condition: '全新',
     cover: '💄', images: ['💄'], location: '5号宿舍楼',
     sellerName: '陈同学', sellerVerified: true, sellerCredit: '成交9笔·好评97%',
-    status: '在售', createdAt: Date.now() - 3600 * 1000 * 12
+    status: '在售', views: 62, createdAt: Date.now() - 3600 * 1000 * 12
   },
   {
     _id: 'm5', title: 'ThinkPad X1 i5 办公够用',
@@ -43,7 +47,7 @@ const ITEMS = [
     price: 2100, originPrice: 6999, category: '数码', condition: '八成新',
     cover: '💻', images: ['💻'], location: '研究生公寓',
     sellerName: '赵同学', sellerVerified: true, sellerCredit: '成交3笔·好评100%',
-    status: '在售', createdAt: Date.now() - 3600 * 1000 * 20
+    status: '在售', views: 133, createdAt: Date.now() - 3600 * 1000 * 20
   },
   {
     _id: 'm6', title: '考研英语真题 全套+笔记',
@@ -51,8 +55,8 @@ const ITEMS = [
     price: 35, originPrice: 150, category: '教材', condition: '九成新',
     cover: '📗', images: ['📗'], location: '2号宿舍楼',
     sellerName: '孙同学', sellerVerified: true, sellerCredit: '成交6笔·好评96%',
-    status: '在售', createdAt: Date.now() - 3600 * 1000 * 26
+    status: '在售', views: 74, createdAt: Date.now() - 3600 * 1000 * 26
   }
 ];
 
-module.exports = { CATEGORIES, ITEMS };
+module.exports = { CATEGORIES, CONDITIONS, HOT_WORDS, ITEMS };
