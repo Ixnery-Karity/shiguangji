@@ -1,0 +1,9 @@
+{
+  "name": "tradeConfirm",
+  "version": "1.0.0",
+  "description": "交易撮合闭环：服务端双向确认，双方完成后自动标记商品已售",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

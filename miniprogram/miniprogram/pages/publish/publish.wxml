@@ -1,0 +1,67 @@
+<!-- 发布闲置 -->
+<view class="page">
+  <!-- 未认证拦截提示 -->
+  <view wx:if="{{authLevel < 2}}" class="auth-guard">
+    <text class="ico">🎓</text>
+    <view class="ag-text">
+      <view class="ag-title">发布前需完成学生认证</view>
+      <view class="ag-sub">仅本校认证学生可发布，保障交易安全</view>
+    </view>
+    <view class="ag-btn" bindtap="goAuth">去认证</view>
+  </view>
+
+  <!-- 图片上传 -->
+  <view class="section">
+    <view class="label">上传实拍图（最多9张）</view>
+    <view class="imgs">
+      <view wx:for="{{images}}" wx:key="*this" class="img-box filled" data-idx="{{index}}" bindtap="previewImg">
+        <text class="ph">📷</text>
+        <text class="del" catchtap="removeImg" data-idx="{{index}}">×</text>
+      </view>
+      <view wx:if="{{images.length < 9}}" class="img-box add" bindtap="chooseImg">＋</view>
+    </view>
+  </view>
+
+  <!-- 表单 -->
+  <view class="section">
+    <view class="field">
+      <text class="label">标题</text>
+      <input class="input" placeholder="给闲置起个吸引人的标题" value="{{title}}" bindinput="onField" data-k="title" maxlength="40" />
+    </view>
+    <view class="field col">
+      <text class="label">描述</text>
+      <textarea class="textarea" placeholder="成色、入手渠道、可否小刀、交易方式…" value="{{desc}}" bindinput="onField" data-k="desc" maxlength="500" />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="field col">
+      <text class="label">分类</text>
+      <view class="chips">
+        <text wx:for="{{cats}}" wx:key="*this" class="chip {{item === category ? 'on' : ''}}" data-v="{{item}}" data-k="category" bindtap="onChip">{{item}}</text>
+      </view>
+    </view>
+    <view class="field col">
+      <text class="label">成色</text>
+      <view class="chips">
+        <text wx:for="{{conditions}}" wx:key="*this" class="chip {{item === condition ? 'on' : ''}}" data-v="{{item}}" data-k="condition" bindtap="onChip">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="field">
+      <text class="label">价格</text>
+      <input class="input price-input" type="digit" placeholder="0" value="{{price}}" bindinput="onField" data-k="price" />
+      <text class="unit">元</text>
+    </view>
+    <view class="field">
+      <text class="label">交易位置</text>
+      <input class="input" placeholder="如：3号宿舍楼" value="{{location}}" bindinput="onField" data-k="location" />
+    </view>
+  </view>
+
+  <view class="submit-wrap">
+    <button class="btn-primary {{canSubmit ? '' : 'disabled'}}" bindtap="onSubmit">发布</button>
+  </view>
+</view>

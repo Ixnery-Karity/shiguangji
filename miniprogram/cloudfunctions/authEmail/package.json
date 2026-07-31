@@ -1,0 +1,10 @@
+{
+  "name": "authEmail",
+  "version": "1.0.0",
+  "description": "校园邮箱验证码：服务端生成/校验，可选 SMTP 真实发信",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3",
+    "nodemailer": "^6.9.9"
+  }
+}

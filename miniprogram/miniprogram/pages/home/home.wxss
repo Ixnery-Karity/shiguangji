@@ -1,0 +1,32 @@
+.page { min-height: 100vh; }
+
+/* 搜索栏 */
+.searchbar {
+  display: flex; align-items: center; gap: 16rpx;
+  padding: 16rpx 24rpx; background: #fff;
+}
+.search-box {
+  flex: 1; height: 64rpx; background: #f0f0f0; border-radius: 32rpx;
+  display: flex; align-items: center; padding: 0 24rpx;
+}
+.search-box .ico { font-size: 26rpx; margin-right: 10rpx; }
+.search-box .input { flex: 1; font-size: 26rpx; }
+.loc { font-size: 24rpx; color: #2E7D32; white-space: nowrap; }
+
+/* 分类 */
+.cats { white-space: nowrap; background: #fff; padding: 8rpx 16rpx 16rpx; }
+.cat {
+  display: inline-block; padding: 10rpx 24rpx; margin-right: 12rpx;
+  border-radius: 24rpx; background: #f0f0f0; color: #555; font-size: 24rpx;
+}
+.cat.on { background: #e8f5e9; color: #2E7D32; font-weight: bold; }
+
+.tip {
+  margin: 16rpx 24rpx; padding: 16rpx 20rpx; background: #fff8e1;
+  color: #a1740b; font-size: 22rpx; border-radius: 12rpx; line-height: 1.5;
+}
+
+/* 瀑布流 */
+.waterfall { display: flex; gap: 16rpx; padding: 16rpx; }
+.col { flex: 1; width: 0; }
+.loading { text-align: center; color: #999; font-size: 24rpx; padding: 24rpx; }

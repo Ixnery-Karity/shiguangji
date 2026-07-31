@@ -1,0 +1,12 @@
+<!-- 商品卡片组件 -->
+<view class="card" bindtap="onTap">
+  <view class="thumb {{colorClass}}">{{item.cover || '📦'}}</view>
+  <view class="info">
+    <view class="title ellipsis-2">{{item.title}}</view>
+    <view class="price"><text class="sym">¥</text>{{item.price}}</view>
+    <view class="meta">
+      <text class="loc">📍{{item.location}}</text>
+      <text wx:if="{{item.sellerVerified}}" class="vf">✔认证</text>
+    </view>
+  </view>
+</view>

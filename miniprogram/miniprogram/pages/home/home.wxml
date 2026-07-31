@@ -1,0 +1,40 @@
+<!-- 首页 -->
+<view class="page">
+  <!-- 搜索栏 -->
+  <view class="searchbar">
+    <view class="search-box">
+      <text class="ico">🔍</text>
+      <input class="input" placeholder="搜索教材 / 数码 / 生活用品" value="{{keyword}}"
+        bindconfirm="onSearch" bindinput="onInput" confirm-type="search" />
+    </view>
+    <view class="loc">📍{{campus}}</view>
+  </view>
+
+  <!-- 分类 -->
+  <scroll-view class="cats" scroll-x>
+    <view wx:for="{{categories}}" wx:key="*this"
+      class="cat {{item === category ? 'on' : ''}}"
+      data-cat="{{item}}" bindtap="onCategory">{{item}}</view>
+  </scroll-view>
+
+  <!-- 提示：云环境未就绪时展示 -->
+  <view wx:if="{{!cloudReady}}" class="tip">
+    当前为演示数据（未连接云开发）。部署云函数并运行 seed 后即为真实数据。
+  </view>
+
+  <!-- 瀑布流（两列） -->
+  <view wx:if="{{items.length}}" class="waterfall">
+    <view class="col">
+      <item-card wx:for="{{colLeft}}" wx:key="_id" item="{{item}}" />
+    </view>
+    <view class="col">
+      <item-card wx:for="{{colRight}}" wx:key="_id" item="{{item}}" />
+    </view>
+  </view>
+  <view wx:else class="empty">
+    <text class="emoji">🗂️</text>
+    <text>还没有商品，去发布第一个吧～</text>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading">加载中…</view>
+</view>

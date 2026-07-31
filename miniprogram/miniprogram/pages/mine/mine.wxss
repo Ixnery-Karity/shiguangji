@@ -1,0 +1,21 @@
+.head { background: linear-gradient(135deg, #2E7D32, #1b5e20); padding: 48rpx 32rpx 60rpx; display: flex; align-items: center; gap: 24rpx; }
+.avatar { width: 108rpx; height: 108rpx; border-radius: 50%; background: #fff; color: #2E7D32; display: flex; align-items: center; justify-content: center; font-size: 44rpx; font-weight: bold; }
+.nickname { color: #fff; font-size: 36rpx; font-weight: bold; }
+.vf { display: inline-block; margin-top: 12rpx; font-size: 22rpx; color: #fff; background: rgba(255,255,255,.22); padding: 6rpx 20rpx; border-radius: 20rpx; }
+.vf.on { background: rgba(255,255,255,.3); }
+
+.stats { background: #fff; margin: -32rpx 24rpx 0; border-radius: 16rpx; display: flex; padding: 28rpx 0; box-shadow: 0 4rpx 16rpx rgba(0,0,0,.08); }
+.stats .s { flex: 1; text-align: center; }
+.stats .n { font-size: 36rpx; font-weight: bold; color: #2E7D32; }
+.stats .l { font-size: 22rpx; color: #999; margin-top: 6rpx; }
+
+.menu { background: #fff; margin: 24rpx; border-radius: 16rpx; overflow: hidden; }
+.row { display: flex; align-items: center; padding: 30rpx 28rpx; border-bottom: 1rpx solid #f2f2f2; }
+.row:last-child { border-bottom: none; }
+.row .e { font-size: 36rpx; margin-right: 20rpx; }
+.row .t { font-size: 28rpx; color: #333; }
+.row .ar { margin-left: auto; color: #ccc; font-size: 28rpx; }
+.row .ar.green { color: #2E7D32; font-size: 24rpx; }
+.row .ar.tag2 { color: #ff9800; font-size: 22rpx; background: #fff3e0; padding: 4rpx 14rpx; border-radius: 14rpx; }
+
+.ver { text-align: center; color: #bbb; font-size: 22rpx; padding: 40rpx 0; }

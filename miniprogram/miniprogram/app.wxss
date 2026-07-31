@@ -1,0 +1,78 @@
+/* app.wxss —— 全局样式 */
+page {
+  --brand: #2E7D32;
+  --brand-light: #e8f5e9;
+  --brand-dark: #1b5e20;
+  --grey: #888;
+  --line: #ececec;
+  --bg: #f4f6f8;
+  --danger: #e53935;
+  --gold: #ff9800;
+  background: var(--bg);
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: #222;
+  font-size: 28rpx;
+}
+
+/* 通用容器 */
+.container { padding: 24rpx; }
+.card {
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,.05);
+}
+
+/* 主按钮 */
+.btn-primary {
+  background: var(--brand);
+  color: #fff;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+  text-align: center;
+  line-height: 88rpx;
+  height: 88rpx;
+}
+.btn-primary.disabled { background: #bdbdbd; }
+.btn-ghost {
+  background: #fff;
+  color: var(--brand);
+  border: 1rpx solid var(--brand);
+  border-radius: 44rpx;
+  text-align: center;
+  line-height: 76rpx;
+  height: 78rpx;
+}
+
+/* 认证徽章 */
+.badge-verify {
+  display: inline-block;
+  font-size: 20rpx;
+  color: var(--brand);
+  background: var(--brand-light);
+  padding: 2rpx 12rpx;
+  border-radius: 16rpx;
+  margin-left: 8rpx;
+}
+
+/* 价格 */
+.price { color: var(--danger); font-weight: bold; }
+.price .sym { font-size: 22rpx; }
+
+/* 文字省略 */
+.ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ellipsis-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* 分割 */
+.divider { height: 16rpx; background: var(--bg); }
+.muted { color: var(--grey); font-size: 24rpx; }
+.center { display: flex; align-items: center; justify-content: center; }
+
+/* 空态 */
+.empty { text-align: center; color: var(--grey); padding: 120rpx 0; font-size: 26rpx; }
+.empty .emoji { font-size: 80rpx; display: block; margin-bottom: 20rpx; }

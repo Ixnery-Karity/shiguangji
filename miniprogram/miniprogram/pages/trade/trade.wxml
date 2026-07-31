@@ -1,0 +1,40 @@
+<!-- 我的交易 / 我发布的 -->
+<view class="page">
+  <view class="tabs">
+    <view class="tab {{tab==='ongoing' ? 'on' : ''}}" data-t="ongoing" bindtap="switchTab">进行中</view>
+    <view class="tab {{tab==='done' ? 'on' : ''}}" data-t="done" bindtap="switchTab">已完成</view>
+    <view class="tab {{tab==='items' ? 'on' : ''}}" data-t="items" bindtap="switchTab">我发布的</view>
+  </view>
+
+  <!-- 交易列表 -->
+  <block wx:if="{{tab !== 'items'}}">
+    <view wx:if="{{list.length}}" class="list">
+      <view wx:for="{{list}}" wx:key="_id" class="trade-item">
+        <view class="th">📦</view>
+        <view class="t-main">
+          <view class="t-title ellipsis">{{item.itemTitle}}</view>
+          <view class="t-meta">对方：{{item.sellerName || '—'}}</view>
+          <view class="t-price">¥{{item.price}}</view>
+        </view>
+        <view class="t-status {{item.status==='已完成' ? 'done' : 'ing'}}">{{item.status}}</view>
+      </view>
+    </view>
+    <view wx:else class="empty"><text class="emoji">🤝</text><text>暂无{{tab==='done' ? '已完成' : '进行中'}}的交易</text></view>
+  </block>
+
+  <!-- 我发布的 -->
+  <block wx:else>
+    <view wx:if="{{myItems.length}}" class="list">
+      <view wx:for="{{myItems}}" wx:key="_id" class="trade-item" data-id="{{item._id}}" bindtap="openItem">
+        <view class="th">{{item.cover || '📦'}}</view>
+        <view class="t-main">
+          <view class="t-title ellipsis">{{item.title}}</view>
+          <view class="t-meta">{{item.category}} · {{item.condition}}</view>
+          <view class="t-price">¥{{item.price}}</view>
+        </view>
+        <view class="t-status {{item.status==='在售' ? 'ing' : 'done'}}">{{item.status}}</view>
+      </view>
+    </view>
+    <view wx:else class="empty"><text class="emoji">📦</text><text>还没有发布过商品</text></view>
+  </block>
+</view>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>校园二手交易小程序 · 核心页面原型</title>
+<style>
+  :root{
+    --brand:#2E7D32; --brand-light:#e8f5e9; --brand-dark:#1b5e20;
+    --grey:#888; --line:#ececec; --bg:#f4f6f8; --danger:#e53935; --gold:#ff9800;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+  body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:var(--bg);color:#222;padding:32px 16px;}
+  h1.page-title{text-align:center;color:var(--brand);font-size:26px;margin-bottom:4px;}
+  p.sub{text-align:center;color:var(--grey);font-size:14px;margin-bottom:28px;}
+  .screens{display:flex;flex-wrap:wrap;gap:32px 26px;justify-content:center;align-items:flex-start;}
+  /* 手机外壳 */
+  .phone{width:300px;background:#fff;border-radius:32px;box-shadow:0 10px 34px rgba(0,0,0,.14);
+         overflow:hidden;border:1px solid #e3e3e3;position:relative;}
+  .phone .notch{height:26px;background:#fff;display:flex;align-items:center;justify-content:space-between;
+                padding:0 16px;font-size:11px;color:#333;}
+  .phone .notch .dot{width:52px;height:15px;background:#111;border-radius:10px;position:absolute;left:50%;transform:translateX(-50%);top:6px;}
+  .screen-label{text-align:center;font-size:13px;color:var(--brand-dark);font-weight:bold;margin-top:10px;}
+  /* 通用小程序导航栏 */
+  .navbar{height:42px;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;
+          font-size:15px;font-weight:bold;position:relative;}
+  .navbar .back{position:absolute;left:12px;font-size:16px;font-weight:normal;}
+  .navbar .cap{position:absolute;right:10px;top:-24px;width:80px;height:22px;}
+  .body{height:468px;overflow:hidden;background:#fafafa;position:relative;}
+  /* TabBar */
+  .tabbar{height:50px;border-top:1px solid var(--line);display:flex;background:#fff;}
+  .tabbar .tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+               font-size:10px;color:var(--grey);gap:2px;}
+  .tabbar .tab.active{color:var(--brand);}
+  .tabbar .tab .ico{font-size:18px;line-height:1;}
+  .tabbar .tab.pub .ico{background:var(--brand);color:#fff;width:34px;height:34px;border-radius:50%;
+                        display:flex;align-items:center;justify-content:center;margin-top:-14px;box-shadow:0 3px 8px rgba(46,125,50,.4);}
+  /* 搜索栏 */
+  .searchbar{padding:8px 12px;background:#fff;display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line);}
+  .searchbar .box{flex:1;background:#f0f0f0;border-radius:16px;height:30px;display:flex;align-items:center;
+                  padding:0 12px;color:#aaa;font-size:12px;gap:6px;}
+  .searchbar .loc{font-size:11px;color:var(--brand);white-space:nowrap;}
+  /* 分类 */
+  .cats{display:flex;gap:4px;padding:8px 10px;background:#fff;overflow-x:auto;font-size:11px;}
+  .cats span{padding:4px 10px;border-radius:12px;background:#f0f0f0;white-space:nowrap;color:#555;}
+  .cats span.on{background:var(--brand-light);color:var(--brand);font-weight:bold;}
+  /* 瀑布流 */
+  .waterfall{padding:8px;column-count:2;column-gap:8px;}
+  .card{background:#fff;border-radius:10px;overflow:hidden;margin-bottom:8px;break-inside:avoid;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+  .card .thumb{height:96px;background:linear-gradient(135deg,#dfe9e3,#c8e6c9);display:flex;align-items:center;justify-content:center;color:#7cae86;font-size:24px;}
+  .card .thumb.b{background:linear-gradient(135deg,#e3ecf7,#bbdefb);color:#8ab0d6;}
+  .card .thumb.c{background:linear-gradient(135deg,#fdeede,#ffe0b2);color:#d5b078;}
+  .card .thumb.d{background:linear-gradient(135deg,#f7e3ee,#f8bbd0);color:#d68ab0;}
+  .card .info{padding:6px 8px;}
+  .card .info .t{font-size:12px;line-height:1.3;color:#333;max-height:32px;overflow:hidden;}
+  .card .info .price{color:var(--danger);font-weight:bold;font-size:14px;margin-top:4px;}
+  .card .info .price small{font-size:10px;}
+  .card .info .meta{display:flex;justify-content:space-between;align-items:center;margin-top:4px;font-size:10px;color:var(--grey);}
+  .card .info .meta .badge{color:var(--brand);}
+  /* 通用内容块 */
+  .pad{padding:12px;}
+  .big-img{height:200px;background:linear-gradient(135deg,#dfe9e3,#c8e6c9);display:flex;align-items:center;justify-content:center;color:#7cae86;font-size:40px;position:relative;}
+  .big-img .pg{position:absolute;bottom:8px;right:10px;background:rgba(0,0,0,.5);color:#fff;font-size:11px;padding:2px 8px;border-radius:10px;}
+  .price-row{padding:10px 12px;background:#fff;}
+  .price-row .p{color:var(--danger);font-size:22px;font-weight:bold;}
+  .price-row .p small{font-size:12px;}
+  .price-row .o{color:var(--grey);font-size:11px;text-decoration:line-through;margin-left:8px;}
+  .price-row .title{font-size:14px;margin-top:6px;color:#222;line-height:1.4;}
+  .tagline{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+  .tagline span{font-size:10px;background:var(--brand-light);color:var(--brand);padding:2px 8px;border-radius:10px;}
+  .seller{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#fff;margin-top:8px;}
+  .seller .av{width:34px;height:34px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;}
+  .seller .n{font-size:13px;font-weight:bold;}
+  .seller .verify{font-size:10px;color:var(--brand);background:var(--brand-light);padding:1px 6px;border-radius:8px;margin-left:4px;}
+  .seller .rate{font-size:10px;color:var(--grey);margin-top:2px;}
+  .locbox{padding:10px 12px;background:#fff;margin-top:8px;font-size:12px;color:#555;display:flex;align-items:center;gap:6px;}
+  .locbox .g{margin-left:auto;color:var(--brand);font-size:11px;}
+  .detail-bar{position:absolute;bottom:0;left:0;right:0;height:52px;background:#fff;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 10px;gap:8px;}
+  .detail-bar .ic{flex-direction:column;display:flex;align-items:center;font-size:9px;color:var(--grey);width:42px;}
+  .detail-bar .ic .e{font-size:16px;}
+  .detail-bar .btn{flex:1;height:38px;border-radius:19px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;}
+  .btn-chat{background:#fff;border:1px solid var(--brand);color:var(--brand);}
+  .btn-buy{background:var(--brand);color:#fff;}
+  /* 表单 */
+  .form-row{background:#fff;padding:12px;border-bottom:1px solid var(--line);}
+  .form-row .lbl{font-size:12px;color:#888;margin-bottom:6px;}
+  .form-row .inp{font-size:13px;color:#bbb;}
+  .up-imgs{display:flex;gap:8px;flex-wrap:wrap;}
+  .up-imgs .box{width:60px;height:60px;border-radius:8px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:22px;}
+  .up-imgs .box.filled{background:linear-gradient(135deg,#dfe9e3,#c8e6c9);color:#7cae86;}
+  .chip-row{display:flex;gap:6px;flex-wrap:wrap;}
+  .chip-row span{font-size:11px;padding:4px 12px;border-radius:14px;background:#f0f0f0;color:#666;}
+  .chip-row span.on{background:var(--brand);color:#fff;}
+  .submit{margin:16px 12px;height:44px;background:var(--brand);color:#fff;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:bold;}
+  /* 认证页 */
+  .auth-step{background:#fff;margin:10px 12px;border-radius:12px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+  .auth-step .h{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:bold;}
+  .auth-step .num{width:22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;}
+  .auth-step .num.done{background:var(--brand);}
+  .auth-step .num.wait{background:#ccc;}
+  .auth-step .st{margin-left:auto;font-size:11px;}
+  .auth-step .st.ok{color:var(--brand);}
+  .auth-step .st.ing{color:var(--gold);}
+  .auth-step .st.no{color:#bbb;}
+  .auth-step .d{font-size:11px;color:#888;margin-top:8px;line-height:1.5;}
+  .auth-step .mini-btn{margin-top:10px;height:32px;border-radius:16px;background:var(--brand-light);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;}
+  .auth-banner{background:linear-gradient(135deg,var(--brand),var(--brand-dark));color:#fff;padding:18px 14px;}
+  .auth-banner .t{font-size:16px;font-weight:bold;}
+  .auth-banner .s{font-size:11px;opacity:.9;margin-top:4px;}
+  /* 聊天 */
+  .chat-body{background:#ededed;height:100%;padding:12px 10px;display:flex;flex-direction:column;gap:10px;}
+  .msg{max-width:72%;padding:8px 10px;border-radius:10px;font-size:12px;line-height:1.4;}
+  .msg.them{background:#fff;align-self:flex-start;}
+  .msg.me{background:#95ec69;align-self:flex-end;}
+  .msg-sys{align-self:center;font-size:10px;color:#999;background:rgba(0,0,0,.05);padding:3px 10px;border-radius:8px;}
+  .item-strip{background:#fff;border-radius:8px;padding:8px;display:flex;gap:8px;align-items:center;}
+  .item-strip .th{width:40px;height:40px;border-radius:6px;background:linear-gradient(135deg,#dfe9e3,#c8e6c9);}
+  .item-strip .nm{font-size:11px;}
+  .item-strip .pr{color:var(--danger);font-size:13px;font-weight:bold;}
+  .item-strip .deal{margin-left:auto;background:var(--brand);color:#fff;font-size:10px;padding:5px 10px;border-radius:12px;}
+  .chat-input{position:absolute;bottom:0;left:0;right:0;height:44px;background:#f7f7f7;border-top:1px solid var(--line);display:flex;align-items:center;padding:0 10px;gap:8px;font-size:12px;color:#aaa;}
+  .chat-input .field{flex:1;background:#fff;border-radius:16px;height:30px;display:flex;align-items:center;padding:0 12px;}
+  /* 个人中心 */
+  .mine-head{background:linear-gradient(135deg,var(--brand),var(--brand-dark));padding:22px 16px 30px;color:#fff;display:flex;align-items:center;gap:12px;}
+  .mine-head .av{width:52px;height:52px;border-radius:50%;background:#fff;color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold;}
+  .mine-head .nm{font-size:17px;font-weight:bold;}
+  .mine-head .vf{font-size:11px;background:rgba(255,255,255,.25);padding:2px 8px;border-radius:10px;margin-top:4px;display:inline-block;}
+  .mine-stats{background:#fff;margin:-16px 12px 0;border-radius:12px;display:flex;padding:14px 0;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+  .mine-stats .s{flex:1;text-align:center;}
+  .mine-stats .s .n{font-size:17px;font-weight:bold;color:var(--brand);}
+  .mine-stats .s .l{font-size:10px;color:var(--grey);margin-top:2px;}
+  .mine-menu{background:#fff;margin:12px;border-radius:12px;overflow:hidden;}
+  .mine-menu .row{display:flex;align-items:center;padding:13px 14px;border-bottom:1px solid var(--line);font-size:13px;gap:10px;}
+  .mine-menu .row:last-child{border-bottom:none;}
+  .mine-menu .row .e{font-size:16px;}
+  .mine-menu .row .ar{margin-left:auto;color:#ccc;}
+  .legend{max-width:960px;margin:30px auto 0;background:#fff;border-radius:12px;padding:18px 22px;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+  .legend h3{color:var(--brand);font-size:15px;margin-bottom:8px;}
+  .legend p{font-size:13px;color:#555;line-height:1.7;}
+</style>
+</head>
+<body>
+  <h1 class="page-title">校园二手交易小程序 · 核心页面原型</h1>
+  <p class="sub">v0.1.0 · 低保真交互原型（仅示意布局与信息层级，非最终视觉）</p>
+
+  <div class="screens">
+
+    <!-- 1 首页 -->
+    <div>
+      <div class="phone">
+        <div class="notch"><span>9:41</span><div class="dot"></div><span>📶 🔋</span></div>
+        <div class="searchbar">
+          <div class="box">🔍 搜索教材 / 数码 / 生活用品</div>
+          <div class="loc">📍 A校区 ▾</div>
+        </div>
+        <div class="cats"><span class="on">全部</span><span>教材</span><span>数码</span><span>生活</span><span>美妆</span><span>卡券</span></div>
+        <div class="body" style="height:376px;overflow:auto;">
+          <div class="waterfall">
+            <div class="card"><div class="thumb">📘</div><div class="info"><div class="t">高数教材 同济第七版 九成新</div><div class="price"><small>¥</small>15</div><div class="meta"><span>3号宿舍楼</span><span class="badge">✔认证</span></div></div></div>
+            <div class="card"><div class="thumb b">🎧</div><div class="info"><div class="t">索尼降噪耳机 WH-1000XM4</div><div class="price"><small>¥</small>680</div><div class="meta"><span>图书馆</span><span class="badge">✔认证</span></div></div></div>
+            <div class="card"><div class="thumb c">🚲</div><div class="info"><div class="t">通勤自行车 捷安特 可议价</div><div class="price"><small>¥</small>220</div><div class="meta"><span>东门</span><span class="badge">✔认证</span></div></div></div>
+            <div class="card"><div class="thumb d">💄</div><div class="info"><div class="t">全新口红 色号#12 未拆封</div><div class="price"><small>¥</small>60</div><div class="meta"><span>5号楼</span><span class="badge">✔认证</span></div></div></div>
+            <div class="card"><div class="thumb b">💻</div><div class="info"><div class="t">ThinkPad X1 i5 办公够用</div><div class="price"><small>¥</small>2100</div><div class="meta"><span>研究生公寓</span><span class="badge">✔认证</span></div></div></div>
+            <div class="card"><div class="thumb">📗</div><div class="info"><div class="t">考研英语真题 全套笔记</div><div class="price"><small>¥</small>35</div><div class="meta"><span>2号楼</span><span class="badge">✔认证</span></div></div></div>
+          </div>
+        </div>
+        <div class="tabbar">
+          <div class="tab active"><div class="ico">🏠</div>首页</div>
+          <div class="tab"><div class="ico">🔍</div>发现</div>
+          <div class="tab pub"><div class="ico">＋</div></div>
+          <div class="tab"><div class="ico">💬</div>消息</div>
+          <div class="tab"><div class="ico">👤</div>我的</div>
+        </div>
+      </div>
+      <div class="screen-label">① 首页 · 商品瀑布流</div>
+    </div>
+
+    <!-- 2 商品详情 -->
+    <div>
+      <div class="phone">
+        <div class="notch"><span>9:41</span><div class="dot"></div><span>📶 🔋</span></div>
+        <div class="navbar"><span class="back">‹</span>商品详情</div>
+        <div class="body">
+          <div class="big-img">📘<div class="pg">1 / 6</div></div>
+          <div class="price-row">
+            <span class="p"><small>¥</small>15</span><span class="o">原价 ¥42</span>
+            <div class="title">高等数学 同济第七版 上册 九成新无笔记</div>
+            <div class="tagline"><span>九成新</span><span>可小刀</span><span>校内当面</span></div>
+          </div>
+          <div class="seller">
+            <div class="av">王</div>
+            <div><div class="n">王同学<span class="verify">✔ 已认证学生</span></div><div class="rate">信用极好 · 成交28笔 · 好评率98%</div></div>
+          </div>
+          <div class="locbox">📍 交易地点：3号宿舍楼楼下 <span class="g">查看路书 ›</span></div>
+          <div class="pad" style="font-size:12px;color:#666;line-height:1.6;">商品描述：正版教材，仅翻阅几次，无划线笔记，无缺页。毕业清仓，诚心可小刀，宿舍楼下当面交易。</div>
+          <div class="detail-bar">
+            <div class="ic"><span class="e">⭐</span>收藏</div>
+            <div class="ic"><span class="e">🚩</span>举报</div>
+            <div class="btn btn-chat">聊一聊</div>
+            <div class="btn btn-buy">我想要</div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-label">② 商品详情页</div>
+    </div>
+
+    <!-- 3 发布 -->
+    <div>
+      <div class="phone">
+        <div class="notch"><span>9:41</span><div class="dot"></div><span>📶 🔋</span></div>
+        <div class="navbar"><span class="back">‹</span>发布闲置</div>
+        <div class="body" style="overflow:auto;">
+          <div class="form-row">
+            <div class="lbl">上传实拍图（最多9张）</div>
+            <div class="up-imgs">
+              <div class="box filled">📷</div><div class="box filled">📷</div><div class="box filled">📷</div><div class="box">＋</div>
+            </div>
+          </div>
+          <div class="form-row"><div class="lbl">标题</div><div class="inp">给闲置起个吸引人的标题…</div></div>
+          <div class="form-row"><div class="lbl">描述</div><div class="inp">成色、入手渠道、可否小刀…</div></div>
+          <div class="form-row"><div class="lbl">分类</div><div class="chip-row"><span class="on">教材</span><span>数码</span><span>生活</span><span>美妆</span><span>卡券</span></div></div>
+          <div class="form-row"><div class="lbl">成色</div><div class="chip-row"><span>全新</span><span class="on">九成新</span><span>七成新</span><span>有使用痕迹</span></div></div>
+          <div class="form-row"><div class="lbl">价格</div><div class="inp" style="color:var(--danger);font-weight:bold;">¥ 15</div></div>
+          <div class="form-row"><div class="lbl">交易位置</div><div class="inp">📍 3号宿舍楼 ▾</div></div>
+          <div class="submit">发布（发布前需完成学生认证）</div>
+        </div>
+      </div>
+      <div class="screen-label">③ 发布闲置</div>
+    </div>
+
+    <!-- 4 认证 -->
+    <div>
+      <div class="phone">
+        <div class="notch"><span>9:41</span><div class="dot"></div><span>📶 🔋</span></div>
+        <div class="navbar"><span class="back">‹</span>学生认证</div>
+        <div class="body" style="overflow:auto;background:var(--bg);">
+          <div class="auth-banner"><div class="t">🎓 认证学生身份</div><div class="s">仅本校认证学生可交易，让每一次交易都更安心</div></div>
+          <div class="auth-step">
+            <div class="h"><span class="num done">✓</span>第一步 · 校园邮箱验证<span class="st ok">已完成</span></div>
+            <div class="d">已绑定 wang****@xxx.edu.cn，邮箱验证是准入门槛。</div>
+          </div>
+          <div class="auth-step">
+            <div class="h"><span class="num">2</span>第二步 · 学生证认证<span class="st ing">审核中</span></div>
+            <div class="d">已上传学生证，系统 OCR 识别姓名/学号/学校，后台人工复核中（约1个工作日）。</div>
+            <div class="mini-btn">查看提交材料</div>
+          </div>
+          <div class="auth-step">
+            <div class="h"><span class="num wait">3</span>第三步 · 学信网学籍（可选）<span class="st no">未开始</span></div>
+            <div class="d">上传学信网《教育部学籍在线验证报告》，获得最高可信「学籍认证」徽章。</div>
+            <div class="mini-btn">去上传</div>
+          </div>
+          <div class="pad" style="font-size:10px;color:#aaa;line-height:1.6;">🔒 我们严格遵守《个人信息保护法》，认证材料仅用于身份核验，加密存储，审核后按规定脱敏处理。</div>
+        </div>
+      </div>
+      <div class="screen-label">④ 学生认证中心</div>
+    </div>
+
+    <!-- 5 聊天 -->
+    <div>
+      <div class="phone">
+        <div class="notch"><span>9:41</span><div class="dot"></div><span>📶 🔋</span></div>
+        <div class="navbar"><span class="back">‹</span>王同学</div>
+        <div class="body">
+          <div class="chat-body">
+            <div class="item-strip"><div class="th"></div><div><div class="nm">高数教材 同济第七版</div><div class="pr">¥15</div></div><div class="deal">发起交易</div></div>
+            <div class="msg-sys">你们已是同校认证学生，请文明交流</div>
+            <div class="msg them">你好，这本书还在吗？</div>
+            <div class="msg me">在的，九成新，可以小刀一点</div>
+            <div class="msg them">那 12 行吗？晚上6点3号楼下当面？</div>
+            <div class="msg me">可以，一言为定 👍</div>
+            <div class="msg-sys">对方发起了当面交易，请确认</div>
+          </div>
+          <div class="chat-input"><div class="field">说点什么…</div><span>😊</span><span>＋</span></div>
+        </div>
+      </div>
+      <div class="screen-label">⑤ 聊天 · 撮合交易</div>
+    </div>
+
+    <!-- 6 个人中心 -->
+    <div>
+      <div class="phone">
+        <div class="notch"><span>9:41</span><div class="dot"></div><span>📶 🔋</span></div>
+        <div class="body" style="height:510px;overflow:auto;background:var(--bg);">
+          <div class="mine-head">
+            <div class="av">李</div>
+            <div><div class="nm">李同学</div><span class="vf">✔ 已认证学生 · A大学</span></div>
+          </div>
+          <div class="mine-stats">
+            <div class="s"><div class="n">5</div><div class="l">在售</div></div>
+            <div class="s"><div class="n">12</div><div class="l">收藏</div></div>
+            <div class="s"><div class="n">8</div><div class="l">已成交</div></div>
+            <div class="s"><div class="n">98%</div><div class="l">好评率</div></div>
+          </div>
+          <div class="mine-menu">
+            <div class="row"><span class="e">📦</span>我发布的<span class="ar">›</span></div>
+            <div class="row"><span class="e">🤝</span>我的交易<span class="ar">›</span></div>
+            <div class="row"><span class="e">⭐</span>我的收藏<span class="ar">›</span></div>
+            <div class="row"><span class="e">🎫</span>我的代金券<span class="ar">›</span></div>
+          </div>
+          <div class="mine-menu">
+            <div class="row"><span class="e">🎓</span>学生认证<span style="margin-left:auto;color:var(--brand);font-size:11px;">已认证 ›</span></div>
+            <div class="row"><span class="e">🗺️</span>贡献导航路书（赚代金券）<span class="ar">›</span></div>
+            <div class="row"><span class="e">🚩</span>我的举报<span class="ar">›</span></div>
+            <div class="row"><span class="e">⚙️</span>设置<span class="ar">›</span></div>
+          </div>
+        </div>
+        <div class="tabbar">
+          <div class="tab"><div class="ico">🏠</div>首页</div>
+          <div class="tab"><div class="ico">🔍</div>发现</div>
+          <div class="tab pub"><div class="ico">＋</div></div>
+          <div class="tab"><div class="ico">💬</div>消息</div>
+          <div class="tab active"><div class="ico">👤</div>我的</div>
+        </div>
+      </div>
+      <div class="screen-label">⑥ 个人中心</div>
+    </div>
+
+  </div>
+
+  <div class="legend">
+    <h3>原型说明</h3>
+    <p>
+    · 本原型覆盖 MVP 的 6 个核心页面：首页信息流、商品详情、发布闲置、学生认证、撮合聊天、个人中心。<br>
+    · 主色 #2E7D32（校园绿），底部 TabBar 采用「首页 / 发现 / 发布(凸起) / 消息 / 我的」五段式。<br>
+    · 强认证贯穿全局：商品卡片、卖家信息均带「✔认证」标识；未认证用户在「发布/聊天」被拦截并引导去认证。<br>
+    · 交易为「仅撮合、线下当面」：聊天页内「发起交易 → 双向确认完成」闭环，平台不介入货款。<br>
+    · 导航路书作为二期入口已在详情页（查看路书）与个人中心（贡献路书赚代金券）预留。
+    </p>
+  </div>
+</body>
+</html>

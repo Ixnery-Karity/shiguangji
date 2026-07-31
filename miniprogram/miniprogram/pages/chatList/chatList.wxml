@@ -1,0 +1,20 @@
+<!-- 消息列表 -->
+<view class="page">
+  <view wx:if="{{chats.length}}" class="list">
+    <view wx:for="{{chats}}" wx:key="id" class="chat-item" data-i="{{index}}" bindtap="openChat">
+      <view class="avatar">{{item.avatar}}</view>
+      <view class="c-main">
+        <view class="c-top">
+          <text class="c-name">{{item.name}}</text>
+          <text class="c-time">{{item.time}}</text>
+        </view>
+        <view class="c-msg ellipsis">{{item.lastMsg}}</view>
+      </view>
+      <view wx:if="{{item.unread}}" class="dot">{{item.unread}}</view>
+    </view>
+  </view>
+  <view wx:else class="empty">
+    <text class="emoji">💬</text>
+    <text>还没有会话，去首页看看心仪的宝贝吧</text>
+  </view>
+</view>

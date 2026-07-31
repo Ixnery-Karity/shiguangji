@@ -1,0 +1,36 @@
+.page { padding-bottom: 40rpx; }
+
+.banner { background: linear-gradient(135deg, #2E7D32, #1b5e20); color: #fff; padding: 40rpx 32rpx; }
+.b-title { font-size: 36rpx; font-weight: bold; }
+.b-sub { font-size: 24rpx; opacity: .9; margin-top: 10rpx; }
+.b-level { font-size: 22rpx; margin-top: 20rpx; background: rgba(255,255,255,.2); display: inline-block; padding: 6rpx 20rpx; border-radius: 20rpx; }
+
+.step { background: #fff; margin: 24rpx; border-radius: 16rpx; padding: 28rpx; box-shadow: 0 2rpx 12rpx rgba(0,0,0,.05); }
+.s-head { display: flex; align-items: center; }
+.num { width: 44rpx; height: 44rpx; border-radius: 50%; background: #2E7D32; color: #fff; font-size: 24rpx; display: flex; align-items: center; justify-content: center; }
+.num.done { background: #2E7D32; }
+.num.wait { background: #ccc; }
+.s-title { font-size: 28rpx; font-weight: bold; margin-left: 16rpx; }
+.s-status { margin-left: auto; font-size: 22rpx; }
+.s-status.ok { color: #2E7D32; }
+.s-status.doing { color: #ff9800; }
+.s-status.wait { color: #bbb; }
+.s-body { margin-top: 20rpx; padding-left: 60rpx; }
+.s-desc { font-size: 24rpx; color: #888; line-height: 1.6; }
+
+.input-row { display: flex; align-items: center; gap: 16rpx; margin-top: 20rpx; }
+.ipt { flex: 1; height: 72rpx; background: #f5f5f5; border-radius: 12rpx; padding: 0 24rpx; font-size: 26rpx; }
+.send-btn { background: #e8f5e9; color: #2E7D32; font-size: 24rpx; padding: 0 24rpx; height: 72rpx; line-height: 72rpx; border-radius: 12rpx; white-space: nowrap; font-weight: bold; }
+.send-btn.disabled { background: #f0f0f0; color: #aaa; }
+.hint { font-size: 22rpx; color: #ff9800; margin-top: 16rpx; }
+
+.cert-upload { margin-top: 20rpx; height: 140rpx; border: 1rpx dashed #ccc; border-radius: 12rpx; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #999; font-size: 24rpx; gap: 8rpx; }
+.cert-upload .cu-ico { font-size: 44rpx; }
+.cert-preview { margin-top: 20rpx; background: #f5faf5; border-radius: 12rpx; padding: 24rpx; display: flex; align-items: center; gap: 16rpx; }
+.cp-ico { font-size: 40rpx; }
+.cp-name { font-size: 26rpx; color: #333; }
+.cp-re { margin-left: auto; font-size: 24rpx; color: #2E7D32; }
+.mini-btn { margin-top: 20rpx; height: 68rpx; line-height: 68rpx; text-align: center; background: #2E7D32; color: #fff; border-radius: 34rpx; font-size: 26rpx; font-weight: bold; }
+.mini-btn.disabled { background: #bdbdbd; }
+
+.privacy { margin: 24rpx; font-size: 22rpx; color: #aaa; line-height: 1.6; }

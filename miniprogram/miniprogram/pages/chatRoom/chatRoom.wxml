@@ -1,0 +1,45 @@
+<!-- 聊天会话 -->
+<view class="page">
+  <!-- 顶部商品条 -->
+  <view class="item-strip">
+    <view class="th">📦</view>
+    <view class="i-main">
+      <view class="i-title ellipsis">{{itemTitle}}</view>
+      <view class="i-price">¥{{price}}</view>
+    </view>
+    <view class="deal-btn {{tradeStatus ? 'ongoing' : ''}}" bindtap="onTradeAction">{{dealBtnText}}</view>
+  </view>
+
+  <!-- 消息区 -->
+  <scroll-view class="msgs" scroll-y scroll-into-view="{{scrollTo}}" scroll-with-animation>
+    <view class="sys">你们已是同校认证学生，请文明交流、当面验货</view>
+    <block wx:for="{{messages}}" wx:key="id">
+      <view wx:if="{{item.type==='sys'}}" class="sys">{{item.content}}</view>
+      <view wx:else class="msg-row {{item.me ? 'me' : 'them'}}" id="msg{{item.id}}">
+        <view wx:if="{{!item.me}}" class="m-avatar">{{sellerAvatar}}</view>
+        <view class="bubble {{item.me ? 'b-me' : 'b-them'}}">{{item.content}}</view>
+      </view>
+    </block>
+
+    <!-- 交易卡片 -->
+    <view wx:if="{{tradeStatus}}" class="trade-card" id="tradeCard">
+      <view class="tc-title">🤝 当面交易</view>
+      <view class="tc-row"><text>商品</text><text class="ellipsis tc-v">{{itemTitle}}</text></view>
+      <view class="tc-row"><text>金额</text><text class="tc-v price">¥{{price}}（线下当面支付）</text></view>
+      <view class="tc-row"><text>状态</text><text class="tc-v tc-status">{{tradeStatusText}}</text></view>
+      <view class="tc-confirm">
+        <view class="cc {{buyerDone ? 'ok' : ''}}">买家{{buyerDone ? '已确认✔' : '待确认'}}</view>
+        <view class="cc {{sellerDone ? 'ok' : ''}}">卖家{{sellerDone ? '已确认✔' : '待确认'}}</view>
+      </view>
+      <view wx:if="{{tradeStatus==='待完成'}}" class="tc-btn" bindtap="confirmDone">我已完成交易</view>
+      <view wx:if="{{tradeStatus==='已完成'}}" class="tc-done">✅ 交易已完成，商品已标记售出</view>
+    </view>
+    <view id="bottom"></view>
+  </scroll-view>
+
+  <!-- 输入栏 -->
+  <view class="input-bar">
+    <input class="field" placeholder="说点什么…" value="{{draft}}" bindinput="onDraft" bindconfirm="send" confirm-type="send" />
+    <view class="send" bindtap="send">发送</view>
+  </view>
+</view>

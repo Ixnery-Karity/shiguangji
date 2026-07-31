@@ -1,0 +1,70 @@
+<!-- 学生认证 -->
+<view class="page">
+  <view class="banner">
+    <view class="b-title">🎓 认证学生身份</view>
+    <view class="b-sub">仅本校认证学生可交易，让每一次交易都更安心</view>
+    <view class="b-level">当前状态：{{levelText}}</view>
+  </view>
+
+  <!-- 第一步：校园邮箱 -->
+  <view class="step">
+    <view class="s-head">
+      <text class="num {{authLevel>=1 ? 'done' : ''}}">{{authLevel>=1 ? '✓' : '1'}}</text>
+      <text class="s-title">第一步 · 校园邮箱验证</text>
+      <text class="s-status ok" wx:if="{{authLevel>=1}}">已完成</text>
+      <text class="s-status doing" wx:else>准入门槛</text>
+    </view>
+    <view class="s-body" wx:if="{{authLevel<1}}">
+      <view class="s-desc">请填写学校邮箱（后缀 edu.cn），我们发送验证码核验。</view>
+      <view class="input-row">
+        <input class="ipt" placeholder="学号@xxx.edu.cn" value="{{email}}" bindinput="onEmail" />
+        <view class="send-btn {{counting ? 'disabled' : ''}}" bindtap="sendCode">{{counting ? countdown+'s' : '发送验证码'}}</view>
+      </view>
+      <view class="input-row" wx:if="{{codeSent}}">
+        <input class="ipt" type="number" placeholder="输入6位验证码" value="{{code}}" bindinput="onCode" maxlength="6" />
+        <view class="send-btn" bindtap="verifyEmail">验证</view>
+      </view>
+      <view class="hint" wx:if="{{devCode}}">演示模式验证码：{{devCode}}（真实项目由后端发送邮件）</view>
+    </view>
+    <view class="s-body" wx:else>
+      <view class="s-desc">已绑定 {{maskedEmail}}</view>
+    </view>
+  </view>
+
+  <!-- 第二步：学生证 -->
+  <view class="step">
+    <view class="s-head">
+      <text class="num {{authLevel>=2 ? 'done' : (authLevel<1 ? 'wait' : '')}}">{{authLevel>=2 ? '✓' : '2'}}</text>
+      <text class="s-title">第二步 · 学生证认证</text>
+      <text class="s-status ok" wx:if="{{authLevel>=2}}">已认证</text>
+      <text class="s-status doing" wx:elif="{{certSubmitted}}">审核中</text>
+      <text class="s-status wait" wx:else>待完成</text>
+    </view>
+    <view class="s-body">
+      <view class="s-desc">上传学生证照片，系统 OCR 识别姓名/学号/学校后，由人工复核。</view>
+      <view class="cert-upload" bindtap="uploadCert" wx:if="{{!certImg}}">
+        <text class="cu-ico">📷</text><text>上传学生证</text>
+      </view>
+      <view class="cert-preview" wx:else>
+        <text class="cp-ico">🪪</text>
+        <text class="cp-name">已选择学生证照片</text>
+        <text class="cp-re" bindtap="uploadCert">重新上传</text>
+      </view>
+      <view class="mini-btn {{certImg && authLevel>=1 ? '' : 'disabled'}}" bindtap="submitCert" wx:if="{{authLevel<2}}">提交审核</view>
+    </view>
+  </view>
+
+  <!-- 第三步：学籍（可选） -->
+  <view class="step">
+    <view class="s-head">
+      <text class="num wait">3</text>
+      <text class="s-title">第三步 · 学信网学籍（可选）</text>
+      <text class="s-status wait">未开始</text>
+    </view>
+    <view class="s-body">
+      <view class="s-desc">上传《教育部学籍在线验证报告》，获得最高可信「学籍认证」徽章。二期开放。</view>
+    </view>
+  </view>
+
+  <view class="privacy">🔒 我们严格遵守《个人信息保护法》，认证材料仅用于身份核验，加密存储，审核后按规定脱敏处理。</view>
+</view>

@@ -1,0 +1,62 @@
+<!-- 商品详情 -->
+<view wx:if="{{item}}" class="page">
+  <!-- 主图 -->
+  <swiper class="gallery" indicator-dots indicator-color="rgba(255,255,255,.5)" indicator-active-color="#fff">
+    <swiper-item wx:for="{{item.images}}" wx:key="*this">
+      <view class="big-img">{{item}}</view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 价格标题 -->
+  <view class="price-block">
+    <view class="row">
+      <text class="price"><text class="sym">¥</text>{{item.price}}</text>
+      <text wx:if="{{item.originPrice}}" class="origin">原价¥{{item.originPrice}}</text>
+    </view>
+    <view class="title">{{item.title}}</view>
+    <view class="tags">
+      <text class="tag">{{item.condition}}</text>
+      <text class="tag">校内当面</text>
+      <text class="tag">仅撮合不担保</text>
+    </view>
+  </view>
+
+  <!-- 卖家 -->
+  <view class="seller">
+    <view class="avatar">{{sellerInitial}}</view>
+    <view class="s-info">
+      <view class="s-name">{{item.sellerName}}
+        <text wx:if="{{item.sellerVerified}}" class="badge-verify">✔ 已认证学生</text>
+      </view>
+      <view class="s-credit muted">{{item.sellerCredit}}</view>
+    </view>
+  </view>
+
+  <!-- 交易位置 -->
+  <view class="locbox">
+    <text>📍 交易地点：{{item.location}}</text>
+    <text class="guide">查看路书 ›</text>
+  </view>
+
+  <!-- 描述 -->
+  <view class="desc-block">
+    <view class="dt">商品描述</view>
+    <view class="dc">{{item.desc}}</view>
+  </view>
+
+  <view class="safe-tip">🛡️ 请在校内公共区域当面验货交易，平台不经手货款，谨防诈骗。</view>
+
+  <!-- 底部操作栏 -->
+  <view class="action-bar">
+    <view class="ic" bindtap="onFav">
+      <text class="e">{{faved ? '⭐' : '☆'}}</text><text>收藏</text>
+    </view>
+    <view class="ic" bindtap="onReport">
+      <text class="e">🚩</text><text>举报</text>
+    </view>
+    <view class="btn btn-chat" bindtap="onChat">聊一聊</view>
+    <view class="btn btn-buy" bindtap="onWant">我想要</view>
+  </view>
+</view>
+
+<view wx:else class="empty"><text class="emoji">🔍</text><text>商品不存在或已下架</text></view>
